@@ -61,21 +61,14 @@ var createTeam = function (req, res) {
                     } else {
                         //manager assigning to team
                         User.updateOne({isDeleted : false, _id : team.teamManagerId}, {$set: {isAssignToTeam : true}}, function (err, result) {
-                        if (err) {
-                            // res.status(HttpStatus.NOT_FOUND).send({msg: err.message, status: HttpStatus.NOT_FOUND});
-                        } else {
-                            // res.status(HttpStatus.OK).send({msg: GlobalMessages.CONST_MSG.deleteTeamSuccess, status: HttpStatus.OK});
-                        }
-
+                    });
                         //leads assigning to team
                         if(team.teamLeadsId){
                                 for(var i=0;i<team.teamLeadsId.length > 0 ;i++){
                                     User.updateOne({isDeleted : false, _id : team.teamLeadsId[i]}, {$set: {isAssignToTeam : true}}, function (err, result) {
-                                        if (err) {
-                                        } else {
-                                        }
-                                }
+                                    
                             });
+                                }
                         }
 
                         res.status(HttpStatus.OK).send({msg : GlobalMessages.CONST_MSG.addTeamSuccess,status :HttpStatus.OK});
@@ -205,18 +198,12 @@ var updateTeam = function (req, res) {
                         if(bodyParams.teamLeadsId){
                                 for(var i=0;i<bodyParams.teamLeadsId.length > 0 ;i++){
                                     User.updateOne({isDeleted : false, _id : bodyParams.teamLeadsId[i]}, {$set: {isAssignToTeam : true}}, function (err, result) {
-                                        if (err) {
-                                        } else {
-                                        }
-                                }
                             });
+                                }
                         }
                          //updating manager is assign
                          if(bodyParams.teamManagerId){
                                 User.updateOne({isDeleted : false, _id : bodyParams.teamManagerId}, {$set: {isAssignToTeam : true}}, function (err, result) {
-                                    if (err) {
-                                    } else {
-                                    }
                             });
                         }
 
