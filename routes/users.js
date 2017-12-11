@@ -50,6 +50,7 @@
 
 	router.get('/getUsers', user.getUsers);
 	router.get('/getUsersByAccountType/:type/:page', user.getUsersByAccountType);
+	router.get('/filterEmailByUserEmail/:email', user.filterEmailByUserEmail);
 
 	/*Routes for Task  CRUD*/
 	

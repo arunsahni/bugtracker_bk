@@ -714,6 +714,36 @@ var getUsersByAccountType = function (req, res){
     });
 }
 
+var filterEmailByUserEmail = function (req, res){
+    var userData = req.params;
+    // var conditions = {
+    //     isDeleted: false,
+    //     accountType : { userData.type, '$options' : 'i'}
+    // };
+    User.find({isDeleted: false, email :{'$regex' : userData.email, '$options' : 'i'}}).count().exec(function (err, data) {
+        if (err) {
+            res.status(HttpStatus.NOT_FOUND).send({err: err.message , status: HttpStatus.NOT_FOUND});
+        } else {
+                var skipVal = (Constant.pagination.itemPerPage * parseInt(req.params.page)) - Constant.pagination.itemPerPage;
+                if(userData.email.length  >=3){
+                     User.find({isDeleted: false, email :{'$regex' : userData.email, '$options' : 'i'}}, {_id:1,email:1,firstName:1,lastName:1,accountType:1,address:1,lastSeen:1})
+                     .skip(skipVal)
+                     .limit(Constant.pagination.itemPerPage)
+                     .exec(function (err, result) {
+                        if (err) {
+                            res.send(HttpStatus.BAD_REQUEST, {err:err.message,status:HttpStatus.BAD_REQUEST});
+                        } else {
+                            res.status(HttpStatus.OK).send({result:result, status :HttpStatus.OK,totalRecords:data});
+                        }
+                    });
+                }
+                else{
+                    res.send(HttpStatus.NOT_FOUND, {msg:'Please Enter more than 3 words filter Email',status:HttpStatus.NOT_FOUND});
+                }
+        }
+    });
+}
+
 exports.changePassword = changePassword;
 exports.deleteUser = deleteUser;
 exports.searchUser = searchUser;
@@ -733,3 +763,4 @@ exports.getUserById = getUserById;
 
 exports.getUsers = getUsers;
 exports.getUsersByAccountType = getUsersByAccountType;
+exports.filterEmailByUserEmail = filterEmailByUserEmail;
