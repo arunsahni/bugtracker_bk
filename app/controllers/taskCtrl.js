@@ -94,7 +94,7 @@ var viewTasks = function (req, res) {
                // res.status(HttpStatus.OK).send({status: HttpStatus.OK, totalRecords: data, result: data}); 
                }
             else{
-                res.send(HttpStatus.NOT_FOUND, {msg: GlobalMessages.CONST_MSG.emptyData,status: HttpStatus.NOT_FOUND});
+                res.send(HttpStatus.NOT_FOUND, {msg: GlobalMessages.CONST_MSG.emptyData,status: HttpStatus.NOT_FOUND, result : [], totalRecords :0});
             }
         }
     });

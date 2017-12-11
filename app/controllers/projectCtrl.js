@@ -78,7 +78,7 @@ var viewProjects = function (req, res, next) {
                 });
             }
             else{
-                res.send(HttpStatus.NOT_FOUND, {msg: GlobalMessages.CONST_MSG.emptyData,status: HttpStatus.NOT_FOUND});
+                res.send(HttpStatus.NOT_FOUND, {msg: GlobalMessages.CONST_MSG.emptyData,status: HttpStatus.NOT_FOUND, result : [], totalRecords :0});
             }
         }
     });

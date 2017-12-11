@@ -129,7 +129,7 @@ var viewTeam = function (req, res) {
                 });
             }
             else{
-                res.send(HttpStatus.NOT_FOUND, {msg: GlobalMessages.CONST_MSG.emptyData,status: HttpStatus.NOT_FOUND});
+                res.send(HttpStatus.NOT_FOUND, {msg: GlobalMessages.CONST_MSG.emptyData,status: HttpStatus.NOT_FOUND, result : [], totalRecords :0});
             }
         }
     });
