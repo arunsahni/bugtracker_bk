@@ -230,6 +230,8 @@ var getTasksByStatus = function (req, res){
          Task.find({isDeleted: false, taskStatus : {'$regex' : tasksData.status, '$options' : 'i'}}, {})
          .skip(skipVal)
          .limit(Constant.pagination.itemPerPage)
+         .populate('assignBy',{firstName:1,lastName:1})
+        .populate('assignTo',{firstName:1,lastName:1})
          .exec(function (err, result) {
             if (err) {
                 res.send(HttpStatus.BAD_REQUEST, {err:err.message,status:HttpStatus.BAD_REQUEST});

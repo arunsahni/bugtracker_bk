@@ -142,41 +142,41 @@ var login = function (req, res) {
                     res.status(HttpStatus.NOT_FOUND).send({msg: err,status:HttpStatus.NOT_FOUND});
                 } else {
                     if(data){
-                        if(data.verifyEmail.verificationStatus == false) {
-                            res.status(HttpStatus.NOT_FOUND).send({msg: "Your email is not verified.",status:HttpStatus.NOT_FOUND});
-                        }else {
-                            if (data) {
-                                bcrypt.compare(user.password, data.password, function (err, result) {
-                                    if (err) {
-                                        res.status(HttpStatus.NON_AUTHORITATIVE_INFORMATION).send({msg: err,status:HttpStatus.NON_AUTHORITATIVE_INFORMATION});
+                    if(data.verifyEmail.verificationStatus == false) {
+                        res.status(HttpStatus.NOT_FOUND).send({msg: "Your email is not verified.",status:HttpStatus.NOT_FOUND});
+                    }else {
+                        if (data) {
+                            bcrypt.compare(user.password, data.password, function (err, result) {
+                                if (err) {
+                                    res.status(HttpStatus.NON_AUTHORITATIVE_INFORMATION).send({msg: err,status:HttpStatus.NON_AUTHORITATIVE_INFORMATION});
+                                } else {
+                                    if (result === true) {
+                                        data.active = true;
+                                        data.lastSeen = new Date().getTime();
+                                        data.save(function (err, success) {
+                                            if (!err) {
+                                                var token = jwt.sign({_id: data._id}, config.secret);
+                                                // to remove password from response.
+                                                data = data.toObject();
+                                                delete data.password;
+                                                res.status(HttpStatus.OK).json({token: token, data: data,status:HttpStatus.OK});
+                                            }
+                                        });
                                     } else {
-                                        if (result === true) {
-                                            data.active = true;
-                                            data.lastSeen = new Date().getTime();
-                                            data.save(function (err, success) {
-                                                if (!err) {
-                                                    var token = jwt.sign({_id: data._id}, config.secret);
-                                                    // to remove password from response.
-                                                    data = data.toObject();
-                                                    delete data.password;
-                                                    res.status(HttpStatus.OK).json({token: token, data: data,status:HttpStatus.OK});
-                                                }
-                                            });
-                                        } else {
-                                            res.status(HttpStatus.NOT_FOUND).send({msg: 'Authentication failed due to wrong details.',status:HttpStatus.NOT_FOUND});
-                                        }
+                                        res.status(HttpStatus.NOT_FOUND).send({msg: 'Authentication failed due to wrong details.',status:HttpStatus.NOT_FOUND});
                                     }
-                                });
-                            } else {
-                                res.status(HttpStatus.NOT_FOUND).send({msg: 'No account found with given email.',status:HttpStatus.NOT_FOUND});
-                            }
+                                }
+                            });
+                        } else {
+                            res.status(HttpStatus.NOT_FOUND).send({msg: 'No account found with given email.',status:HttpStatus.NOT_FOUND});
+                        }
                     }
                 }
                 else{
                    res.status(HttpStatus.NOT_FOUND).send({msg: "Your email is not register with us. Please signup first",status:HttpStatus.NOT_FOUND}); 
                 }
-            }
-        });
+                }
+            });
     }
 };
 
@@ -283,12 +283,17 @@ var storage =   multer.diskStorage({
     }}).single('userPhoto');
   
  var imageUpload = function (req, res) {
-     upload(req,res,function(err) {
-        if(err) {
-            return res.send({msg:GlobalMessages.CONST_MSG.fileUploadError,err:err.message});
-        }
-        res.send({msg:GlobalMessages.CONST_MSG.fileUploadSuccess, status:HttpStatus.OK});
-    });
+    // if(req.body.userId){
+         upload(req,res,function(err,data) {
+            if(err) {
+                return res.send({msg:GlobalMessages.CONST_MSG.fileUploadError,err:err.message});
+            }
+            res.send({msg:GlobalMessages.CONST_MSG.fileUploadSuccess, data:data, status:HttpStatus.OK});
+        });
+    // }
+    // else{
+    //     res.send({msg : 'Please Give UserId', data:[], status:HttpStatus.OK});
+    // }
 
  }
 

@@ -230,14 +230,17 @@ var getTeamById = function (req, res) {
 }
 
 var GetManagersAndLeadsListByTeamId = function(req, res){
+    var bodyparams =  req.body;
+
     if(req.headers['authorization']){
-        if (!req.params || !req.params.TeamId){
+        if (!req.params || !bodyparams.teamsId){
             res.status(HttpStatus.BAD_REQUEST).send({msg: GlobalMessages.CONST_MSG.fillAllFields, status: HttpStatus.BAD_REQUEST});
         } else{
             var conditions = {
                 $and: [
-                    {isDeleted: false},
-                    {_id: req.params.TeamId}
+                    {isDeleted: false}
+                    ,
+                    {_id:{"$in" : bodyparams.teamsId}}
                 ]
             }
             var fields = {

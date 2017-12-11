@@ -20,7 +20,7 @@ router.post('/getTeamById/:TeamId', superAdmin.getTeamById);
 router.get('/viewAllTeam', superAdmin.viewAllTeam);
 router.get('/GetManagersList', superAdmin.GetManagersList);
 router.get('/GetTeamLeadsList', superAdmin.GetTeamLeadsList);
-router.get('/GetManagersAndLeadsListByTeamId/:TeamId', superAdmin.GetManagersAndLeadsListByTeamId);
+router.post('/GetManagersAndLeadsListByTeamId', superAdmin.GetManagersAndLeadsListByTeamId);
 router.put('/addTeamMembers/:TeamId', superAdmin.addTeamMembers);
 /* To delete admin . */
 // router.post('/deleteTeam', superAdmin.deleteTeam);

@@ -12,7 +12,7 @@ const gmailSMTPCredentials = {
     "service": "Gmail",
     "host": "smtp.gmail.com",
     "port": 587,
-    "secure": false,
+    "secure": true,
     "username": "mvsingh7595@gmail.com",
     "password": "mvsingh@123"
 };

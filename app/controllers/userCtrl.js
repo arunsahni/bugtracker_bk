@@ -690,22 +690,28 @@ var getUsersByAccountType = function (req, res){
     //     isDeleted: false,
     //     accountType : { userData.type, '$options' : 'i'}
     // };
-    var skipVal = (Constant.pagination.itemPerPage * parseInt(req.params.page)) - Constant.pagination.itemPerPage;
-    if(userData.type){
-         User.find({isDeleted: false, accountType :{'$regex' : userData.type, '$options' : 'i'}}, {_id:1,email:1,firstName:1,lastName:1,accountType:1,address:1,lastSeen:1})
-         .skip(skipVal)
-         .limit(Constant.pagination.itemPerPage)
-         .exec(function (err, result) {
-            if (err) {
-                res.send(HttpStatus.BAD_REQUEST, {err:err.message,status:HttpStatus.BAD_REQUEST});
-            } else {
-                res.status(HttpStatus.OK).send({result:result, status :HttpStatus.OK,totalRecords:result.length});
-            }
-        });
-    }
-    else{
-        res.send(HttpStatus.NOT_FOUND, {msg:'Please Select Designation',status:HttpStatus.NOT_FOUND});
-    }
+    User.find({isDeleted: false, accountType :{'$regex' : userData.type, '$options' : 'i'}}).count().exec(function (err, data) {
+        if (err) {
+            res.status(HttpStatus.NOT_FOUND).send({err: err.message , status: HttpStatus.NOT_FOUND});
+        } else {
+                var skipVal = (Constant.pagination.itemPerPage * parseInt(req.params.page)) - Constant.pagination.itemPerPage;
+                if(userData.type){
+                     User.find({isDeleted: false, accountType :{'$regex' : userData.type, '$options' : 'i'}}, {_id:1,email:1,firstName:1,lastName:1,accountType:1,address:1,lastSeen:1})
+                     .skip(skipVal)
+                     .limit(Constant.pagination.itemPerPage)
+                     .exec(function (err, result) {
+                        if (err) {
+                            res.send(HttpStatus.BAD_REQUEST, {err:err.message,status:HttpStatus.BAD_REQUEST});
+                        } else {
+                            res.status(HttpStatus.OK).send({result:result, status :HttpStatus.OK,totalRecords:data});
+                        }
+                    });
+                }
+                else{
+                    res.send(HttpStatus.NOT_FOUND, {msg:'Please Select Designation',status:HttpStatus.NOT_FOUND});
+                }
+        }
+    });
 }
 
 exports.changePassword = changePassword;

@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 var Q = require('q');
 var uniqueValidator = require('mongoose-unique-validator');
 var nodemailer = require('nodemailer');
-var CONST = require('../../config/constants');
+
 var _jade = require('jade');
 var fs = require('fs');
 
@@ -55,7 +55,7 @@ MailSchema.statics = {
         obj.msg = 'Hi  &nbsp;&nbsp;'+ req.firstName + ',<br><br>'+
             'You are receiving this because you have successfully registered for bug tracker.<br><br>' +
             'Please click on the following link, or paste into your browser to complete the verification process:<br><br>' +
-            '<a href="' +CONST.hostingServer.serverName+verifyurl + '" target="_blank" >' + CONST.hostingServer.serverName +  verifyurl + '</a><br><br>' +
+            '<a href="' + 'https://bugontrack.herokuapp.com/' + verifyurl + '" target="_blank" >' + 'https://bugontrack.herokuapp.com/' +  verifyurl + '</a><br><br>' +
             'If you did not request this, please ignore.<br><br>';
             'Thanks, <br><br>'
             'Bug tracker Team <br><br>';
@@ -71,7 +71,7 @@ MailSchema.statics = {
         console.log("===========================");
         obj.msg = 'You are receiving this because you (or someone else) has requested a reset of your account password.<br/>' +
             'Please click on the following link, or paste into your browser to complete the process:<br/>' +
-            '<a href="' + CONST.hostingServer.serverName+'reset-password/' + token + '" target="_blank" >' + CONST.hostingServer.serverName+'reset-password/' + token + '</a><br><br>';
+            '<a href="' + 'https://bugontrack.herokuapp.com/reset-password/' + token + '" target="_blank" >' + 'https://bugontrack.herokuapp.com/reset-password/' + token + '</a><br><br>';
 
         obj.subject = "Reset Password";
         obj.email = req.email;
@@ -141,7 +141,7 @@ MailSchema.statics = {
         obj.msg = 'Hello,<br><br>' +
             'This is a confirmation that your account has been activated.<br><br>' +
             'Please click on the following link to login,<br><br>' +
-            '<a href="' + CONST.hostingServer.serverName + '" target="_blank" >'+CONST.hostingServer.serverName+'</a><br><br>';
+            '<a href="' + 'https://bugontrack.herokuapp.com/' + '" target="_blank" >https://bugontrack.herokuapp.com/</a><br><br>';
         obj.subject = "Account Activation";
         obj.email = req.email;
         self.send(obj,cb);
