@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 var Q = require('q');
 var uniqueValidator = require('mongoose-unique-validator');
 var nodemailer = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport');
 
 var _jade = require('jade');
 var fs = require('fs');
@@ -25,6 +26,10 @@ var MailSchema = new Schema({
 // smtp settings
 var transporter = nodemailer.createTransport("SMTP",{
     service: 'gmail',
+    host: 'smtp.gmail.com',
+    secureConnection: true,
+    port: 465,
+    transportMethod: "SMTP",
     auth: {
         user: Constant.gmailSMTPCredentials.username,
         pass:Constant.gmailSMTPCredentials.password
