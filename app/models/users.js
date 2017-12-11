@@ -23,6 +23,7 @@ var userSchema = new Schema({
                             enum: ['Project Manager','Team Manager', 'Team Lead', 'Tester', 'Developer','Admin','Super Admin'],
                             default:'Developer'
                           },
+    isAssignToTeam : {type :Boolean , default : false},
     // accountType          : { type : String, enum : Constant.userRole.roles , default : 'Developer'},
     companyDetails      : {
                             companyId : { type: String }, 

@@ -59,6 +59,13 @@ var createTeam = function (req, res) {
                     if (err) {
                         res.send({err:GlobalMessages.CONST_MSG.fillAllFields,status:HttpStatus.NOT_FOUND,msg:err.message});
                     } else {
+                        User.updateOne({isDeleted : false, _id : team.teamManagerId}, {$set: {isAssignToTeam : true}}, function (err, result) {
+                        if (err) {
+                            // res.status(HttpStatus.NOT_FOUND).send({msg: err.message, status: HttpStatus.NOT_FOUND});
+                        } else {
+                            // res.status(HttpStatus.OK).send({msg: GlobalMessages.CONST_MSG.deleteTeamSuccess, status: HttpStatus.OK});
+                        }
+                    });
                         res.status(HttpStatus.OK).send({msg : GlobalMessages.CONST_MSG.addTeamSuccess,status :HttpStatus.OK});
                     }
                 });
@@ -325,7 +332,7 @@ var viewAllTeam = function (req, res) {
 
 /*get managers List*/
 var GetManagersList = function (req, res) {
-        User.find({accountType : 'Team Manager', isDeleted: false},{_id:1, firstName:1, lastName:1},function(err, data){
+        User.find({accountType : 'Team Manager', isDeleted: false, isAssignToTeam : false},{_id:1, firstName:1, lastName:1},function(err, data){
             if(data){
                     if (err) {
                         res.send({err:GlobalMessages.CONST_MSG.fillAllFields, result : data, status:HttpStatus.NOT_FOUND,msg:err.message});
