@@ -59,13 +59,25 @@ var createTeam = function (req, res) {
                     if (err) {
                         res.send({err:GlobalMessages.CONST_MSG.fillAllFields,status:HttpStatus.NOT_FOUND,msg:err.message});
                     } else {
+                        //manager assigning to team
                         User.updateOne({isDeleted : false, _id : team.teamManagerId}, {$set: {isAssignToTeam : true}}, function (err, result) {
                         if (err) {
                             // res.status(HttpStatus.NOT_FOUND).send({msg: err.message, status: HttpStatus.NOT_FOUND});
                         } else {
                             // res.status(HttpStatus.OK).send({msg: GlobalMessages.CONST_MSG.deleteTeamSuccess, status: HttpStatus.OK});
                         }
-                    });
+
+                        //leads assigning to team
+                        if(team.teamLeadsId){
+                                for(var i=0;i<team.teamLeadsId.length > 0 ;i++){
+                                    User.updateOne({isDeleted : false, _id : team.teamLeadsId[i]}, {$set: {isAssignToTeam : true}}, function (err, result) {
+                                        if (err) {
+                                        } else {
+                                        }
+                                }
+                            });
+                        }
+
                         res.status(HttpStatus.OK).send({msg : GlobalMessages.CONST_MSG.addTeamSuccess,status :HttpStatus.OK});
                     }
                 });
@@ -189,6 +201,25 @@ var updateTeam = function (req, res) {
                     if (err) {
                         res.status(HttpStatus.NOT_FOUND).send({msg: err.message, status: HttpStatus.NOT_FOUND});
                     } else {
+                        //updating isAssignValues
+                        if(bodyParams.teamLeadsId){
+                                for(var i=0;i<bodyParams.teamLeadsId.length > 0 ;i++){
+                                    User.updateOne({isDeleted : false, _id : bodyParams.teamLeadsId[i]}, {$set: {isAssignToTeam : true}}, function (err, result) {
+                                        if (err) {
+                                        } else {
+                                        }
+                                }
+                            });
+                        }
+                         //updating manager is assign
+                         if(bodyParams.teamManagerId){
+                                User.updateOne({isDeleted : false, _id : bodyParams.teamManagerId}, {$set: {isAssignToTeam : true}}, function (err, result) {
+                                    if (err) {
+                                    } else {
+                                    }
+                            });
+                        }
+
                         res.status(HttpStatus.OK).send({msg: GlobalMessages.CONST_MSG.updateTeamSuccess, status: HttpStatus.OK});
                     }
                 });
@@ -348,7 +379,7 @@ var GetManagersList = function (req, res) {
 
 /*get Team Lead*/
 var GetTeamLeadsList = function (req, res) {
-        User.find({accountType : 'Team Lead', isDeleted: false},{_id:1, firstName:1, lastName:1},function(err, data){
+        User.find({accountType : 'Team Lead', isDeleted: false, isAssignToTeam : false},{_id:1, firstName:1, lastName:1},function(err, data){
             if(data){
                     if (err) {
                         res.send({err:GlobalMessages.CONST_MSG.fillAllFields, result : data, status:HttpStatus.NOT_FOUND,msg:err.message});
