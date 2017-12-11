@@ -178,7 +178,7 @@ var updateProject = function (req,res) {
             projectDetails: projectdata.projectDetails,
             projectStartDate: projectdata.projectStartDate,
             projectEndDate: projectdata.projectEndDate,
-            projectCreatedBy: uid
+            projectCreatedBy: projectdata.projectCreatedBy
             // ,
             // projectCreatedByName :  projectdata.projectCreatedByName
         }

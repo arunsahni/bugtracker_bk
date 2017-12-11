@@ -27,9 +27,8 @@ var MailSchema = new Schema({
 var transporter = nodemailer.createTransport("SMTP",{
     service: 'gmail',
     host: 'smtp.gmail.com',
-    secureConnection: true,
-    port: 465,
-    transportMethod: "SMTP",
+    secureConnection: false,
+    port: 587,
     auth: {
         user: Constant.gmailSMTPCredentials.username,
         pass:Constant.gmailSMTPCredentials.password
