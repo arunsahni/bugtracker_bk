@@ -196,12 +196,12 @@ var updateTeam = function (req, res) {
                     } else {
 
                         //updating isAssignValues true for tl assign to team
-                        if(bodyParams.teamLeadsId){ 
-                                for(var i=0;i<bodyParams.teamLeadsId.length > 0 ;i++){
-                                      User.updateOne({isDeleted : false, _id : bodyParams.teamLeadsId[i]}, {$set: {isAssignToTeam : true}}, function (err, result) {
-                                });
-                            }
-                        }
+                        // if(bodyParams.teamLeadsId){ 
+                        //         for(var i=0;i<bodyParams.teamLeadsId.length > 0 ;i++){
+                        //               User.updateOne({isDeleted : false, _id : bodyParams.teamLeadsId[i]}, {$set: {isAssignToTeam : true}}, function (err, result) {
+                        //         });
+                        //     }
+                        // }
 
                         //Fetcing id's of TL for assinging and unassigning
                         Teams.find({isDeleted : false, isAssignToTeam : true, _id: req.params.TeamId}, {teamLeadsId : 1}).exec(function(err, result){
