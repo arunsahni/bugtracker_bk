@@ -11,10 +11,10 @@ const gmailSMTPCredentials = {
     "type": "SMTP",
     "service": "Gmail",
     "host": "smtp.gmail.com",
-    "port": 587,
+    "port": 465,
     "secure": true,
-    "username": "mvsingh7595@gmail.com",
-    "password": "mvsingh@123"
+    "username": "arun.sahaniWildnet@gmail.com",
+    "password": "arun@123"
 };
 
 const smsCredentials = {

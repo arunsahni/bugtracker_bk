@@ -194,14 +194,36 @@ var updateTeam = function (req, res) {
                     if (err) {
                         res.status(HttpStatus.NOT_FOUND).send({msg: err.message, status: HttpStatus.NOT_FOUND});
                     } else {
-                        //updating isAssignValues
-                        if(bodyParams.teamLeadsId){
+
+                        //updating isAssignValues true for tl assign to team
+                        if(bodyParams.teamLeadsId){ 
                                 for(var i=0;i<bodyParams.teamLeadsId.length > 0 ;i++){
-                                    User.updateOne({isDeleted : false, _id : bodyParams.teamLeadsId[i]}, {$set: {isAssignToTeam : true}}, function (err, result) {
-                            });
-                                }
+                                      User.updateOne({isDeleted : false, _id : bodyParams.teamLeadsId[i]}, {$set: {isAssignToTeam : true}}, function (err, result) {
+                                });
+                            }
                         }
-                         //updating manager is assign
+
+                        //Fetcing id's of TL for assinging and unassigning
+                        Teams.find({isDeleted : false, isAssignToTeam : true, _id: req.params.TeamId}, {teamLeadsId : 1}).exec(function(err, result){
+                            if(result.length){
+                                var  doNotMatch = []; 
+                                if(bodyParams.teamLeadsId){
+                                for(var i=0;i<bodyParams.teamLeadsId.length;i++){
+                                   if(result.indexOf(bodyParams.teamLeadsId[i])==-1){doNotMatch.push(bodyParams.teamLeadsId[i]);}
+                                }
+                            }
+                                if(doNotMatch.length){
+                                    console.log("Not match ids :::"+doNotMatch[0])
+                                   for(var i=0;i<doNotMatch.length > 0 ;i++){
+                                        User.updateOne({isDeleted : false, _id : doNotMatch[i]}, {$set: {isAssignToTeam : false}}, function (err, result) {
+                                        });
+                                   }   
+                                }
+                                                                    
+                              }
+                            });
+
+                       //updating manager is assign
                          if(bodyParams.teamManagerId){
                                 User.updateOne({isDeleted : false, _id : bodyParams.teamManagerId}, {$set: {isAssignToTeam : true}}, function (err, result) {
                             });
