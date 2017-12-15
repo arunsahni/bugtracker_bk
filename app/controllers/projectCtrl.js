@@ -33,7 +33,22 @@ var createProject = function (req, res) {
                     if (err) {
                         res.status(HttpStatus.BAD_REQUEST).send({msg: err.message, status: HttpStatus.BAD_REQUEST})
                     } else {
-                        res.status(HttpStatus.OK).send({msg : GlobalMessages.CONST_MSG.addProjectSuccess, status: HttpStatus.OK , result:result});
+                        console.log('assignee Team'+ fields.assigneeTeam);
+                        if(fields.assigneeTeam){
+                                Team.update({_id : { $in : fields.assigneeTeam }},{ $push : {"projectIds" : result._id}}).exec(function(err, result1){
+                                    if(result){
+                                        res.status(HttpStatus.OK).send({msg : 'Assigned Successfully', status: HttpStatus.OK , result:result1});
+                                    }
+                                    else{
+                                        res.status(HttpStatus.OK).send({msg : GlobalMessages.CONST_MSG.addProjectSuccess, status: HttpStatus.OK , result:result1});
+                                    }
+                                    
+                                });
+                        }
+                        else{
+                            res.status(HttpStatus.OK).send({msg : GlobalMessages.CONST_MSG.addProjectSuccess, status: HttpStatus.OK , result:result});
+                        }
+                        
                     }
                 });
             }
@@ -69,6 +84,7 @@ var viewProjects = function (req, res, next) {
                 .skip(skipVal)
                 .limit(Constant.pagination.itemPerPage)
                 .populate('projectCreatedBy',{firstName:1,lastName:1})
+                .populate('assigneeTeam',{_id:1,teamTitle})
                 .exec(function(err, result){
                     if(err){
                         res.status(HttpStatus.BAD_REQUEST).send({msg: err.message, status: HttpStatus.BAD_REQUEST});

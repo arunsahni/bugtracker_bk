@@ -106,6 +106,7 @@ var viewTeam = function (req, res) {
                 .populate('teamManagerId',{firstName:1,lastName:1})
                 .populate('teamMembersId',{firstName:1,lastName:1})
                 .populate('teamLeadsId',{firstName:1,lastName:1})
+                .populate('projectIds',{projectName:1})
                 .exec(function(err, result){
                     if(err){
                         res.status(HttpStatus.BAD_REQUEST).send({msg: err.message, status: HttpStatus.BAD_REQUEST});
