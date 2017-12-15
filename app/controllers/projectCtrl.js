@@ -84,7 +84,7 @@ var viewProjects = function (req, res, next) {
                 .skip(skipVal)
                 .limit(Constant.pagination.itemPerPage)
                 .populate('projectCreatedBy',{firstName:1,lastName:1})
-                .populate('assigneeTeam',{_id:1,teamTitle})
+                .populate('assigneeTeam',{_id:1,teamTitle :1})
                 .exec(function(err, result){
                     if(err){
                         res.status(HttpStatus.BAD_REQUEST).send({msg: err.message, status: HttpStatus.BAD_REQUEST});
